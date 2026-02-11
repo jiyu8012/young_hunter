@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SYSTEM : GLITCH | FINAL LOCATION FIX</title>
+    <style>
+        /* --- 1. Global & Fonts --- */
+        @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Orbitron:wght@400;600;800;900&family=Exo+2:wght@300;500;700&family=Nanum+Gothic:wght@400;700;800&family=Share+Tech+Mono&display=swap');
+        
+        :root {
+            --bg-color: #050505;
+            --primary-blue: #0051ff;
+            --tech-cyan: #00f0ff;
+            --alert-red: #ff2a2a;
+            --text-main: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            font-family: 'Exo 2', 'Nanum Gothic', sans-serif; 
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(0, 81, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 81, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            background-attachment: fixed;
+            padding-bottom: 100px;
+            min-height: 100vh;
+        }
+
+        /* Particles */
+        #bg-particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: hidden; }
+        .particle { 
+            position: absolute; background: var(--tech-cyan); opacity: 0; 
+            animation: floatUp linear infinite; box-shadow: 0 0 5px var(--tech-cyan); 
+        }
+        @keyframes floatUp { 
+            0% { transform: translateY(105vh) rotate(0deg); opacity: 0; } 
+            20% { opacity: 0.5; } 80% { opacity: 0.5; } 
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; } 
+        }
+
+        /* --- 2. Header --- */
+        .hud-frame {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            border: 8px solid transparent; pointer-events: none; z-index: 8000;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8);
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px);
+            background-size: 100% 3px;
+        }
+
+        .top-header {
+            width: 100%; height: 70px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.8); border-bottom: 1px solid rgba(0, 81, 255, 0.3);
+            backdrop-filter: blur(5px); z-index: 1000; position: relative;
+        }
+        .nav-logo { 
+            font-family: 'Black Han Sans', sans-serif; 
+            font-weight: 400; color: #fff; font-size: 1.5rem; 
+            display: flex; align-items: center; gap: 10px; 
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+        }
+        .nav-logo span { color: var(--tech-cyan); margin-left: 5px; }
+
+        /* --- Hero Section --- */
+        .hero-container {
+            width: 95%; max-width: 1000px; margin: 30px auto;
+            position: relative; z-index: 5;
+        }
+        .hero-frame {
+            position: relative; width: 100%; border: 1px solid var(--primary-blue);
+            box-shadow: 0 0 30px rgba(0, 81, 255, 0.2);
+            background: #000; overflow: hidden; border-radius: 4px;
+        }
+        .glitch-wrapper { position: relative; width: 100%; height: auto; overflow: hidden; }
+        .hero-img { width: 100%; display: block; filter: contrast(1.1) brightness(0.9); position: relative; z-index: 1; }
+        
+        .glitch-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/4ae1ad46-c15f-4fe6-9c39-d2e8686c7f49.jpeg') no-repeat center/cover;
+            background-size: 100% auto; opacity: 0; pointer-events: none; z-index: 2;
+            mix-blend-mode: hard-light;
+        }
+        .glitch-layer:nth-child(2) { animation: glitch-anim 2s infinite linear alternate-reverse; background-color: rgba(0, 240, 255, 0.3); background-blend-mode: overlay; }
+        .glitch-layer:nth-child(3) { animation: glitch-anim 2.5s infinite linear alternate-reverse; animation-delay: 0.2s; background-color: rgba(0, 81, 255, 0.3); background-blend-mode: overlay; }
+        @keyframes glitch-anim {
+            0% { opacity: 0; clip-path: inset(50% 0 50% 0); transform: translate(0); }
+            5% { opacity: 0.8; clip-path: inset(10% 0 60% 0); transform: translate(-5px, 2px); }
+            10% { opacity: 0.4; clip-path: inset(80% 0 5% 0); transform: translate(5px, -2px); }
+            15% { opacity: 0; transform: translate(0); }
+            80% { opacity: 0; }
+            85% { opacity: 0.6; clip-path: inset(40% 0 40% 0); transform: translate(-2px, 2px); }
+            100% { opacity: 0; }
+        }
+
+        .overlay-text {
+            position: absolute; bottom: 30px; left: 30px; z-index: 6;
+            background: rgba(0,0,0,0.85); padding: 15px 25px;
+            border-left: 4px solid var(--tech-cyan); backdrop-filter: blur(4px);
+        }
+        .ot-title { font-family: 'Orbitron'; font-size: 1.4rem; font-weight: 900; color: var(--tech-cyan); margin-bottom: 5px; }
+        .ot-sub { font-size: 0.85rem; color: #ccc; font-family: 'Share Tech Mono'; }
+
+        /* --- Tabs --- */
+        .tab-nav {
+            display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+            width: 95%; max-width: 1400px; margin: 0 auto 40px;
+            z-index: 10; position: relative;
+        }
+        .tab-btn {
+            flex: 1; max-width: 250px; min-width: 80px;
+            background: rgba(0, 20, 40, 0.8);
+            border: 1px solid var(--primary-blue);
+            color: #8899aa; padding: 15px 0; cursor: pointer;
+            font-family: 'Black Han Sans', sans-serif; font-size: 1.2rem;
+            transition: 0.3s; text-align: center; letter-spacing: 1px;
+            clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%, 0% 20%);
+        }
+        .tab-btn:hover { background: rgba(0, 81, 255, 0.2); color: #fff; border-color: var(--tech-cyan); }
+        .tab-btn.active {
+            background: var(--tech-cyan); color: #000; border-color: var(--tech-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        /* --- Content Layout --- */
+        .content-area { width: 95%; max-width: 1400px; margin: 0 auto; position: relative; z-index: 5; }
+        .page-section { display: none; animation: fadeIn 0.4s ease-out; }
+        .page-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+
+        /* ----------------------------------------------------
+           NEW MAP INTERFACE STYLES (MAIN TAB)
+           ---------------------------------------------------- */
+        .map-ui {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr;
+            gap: 20px;
+            background: rgba(5, 8, 12, 0.95);
+            border: 1px solid #333;
+            padding: 20px;
+            box-shadow: 0 0 40px rgba(0, 81, 255, 0.1);
+        }
+
+        /* Left: Map Area */
+        .map-viewport {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9; 
+            border: 2px solid var(--primary-blue);
+            overflow: hidden;
+            background: #000;
+        }
+
+        .map-bg {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: grayscale(0.5) contrast(1.2) brightness(0.6);
+            transition: 0.5s;
+        }
+        .map-bg.active-bg { filter: grayscale(0) contrast(1.1) brightness(0.8); }
+
+        /* Map Markers */
+        .map-pin {
+            position: absolute;
+            width: 40px; height: 40px;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            z-index: 10;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .pin-reticle {
+            width: 100%; height: 100%;
+            border: 2px solid var(--tech-cyan);
+            border-radius: 50%;
+            background: rgba(0, 240, 255, 0.1);
+            animation: pulsePin 2s infinite;
+            position: relative;
+        }
+        .pin-reticle::after {
+            content:''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            width: 6px; height: 6px; background: #fff; border-radius: 50%;
+        }
+        .pin-label {
+            position: absolute; top: -25px; left: 50%; transform: translateX(-50%);
+            font-family: 'Orbitron'; font-size: 0.7rem; color: var(--tech-cyan);
+            white-space: nowrap; text-shadow: 0 0 5px #000; opacity: 0; transition: 0.3s;
+            background: rgba(0,0,0,0.7); padding: 2px 5px; border-radius: 3px;
+        }
+        
+        .map-pin:hover .pin-label { opacity: 1; top: -30px; }
+        .map-pin:hover .pin-reticle { background: rgba(0, 240, 255, 0.4); border-color: #fff; }
+        
+        /* Danger Pin (Red) */
+        .map-pin.danger .pin-reticle { border-color: var(--alert-red); background: rgba(255, 42, 42, 0.2); animation: pulsePinRed 1s infinite; }
+        .map-pin.danger .pin-label { color: var(--alert-red); }
+        .map-pin.danger .pin-reticle::after { background: var(--alert-red); }
+
+        @keyframes pulsePin { 0% { box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(0, 240, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 240, 255, 0); } }
+        @keyframes pulsePinRed { 0% { box-shadow: 0 0 0 0 rgba(255, 42, 42, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 42, 42, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 42, 42, 0); } }
+
+
+        /* Right: Location Detail Area */
+        .loc-panel {
+            background: rgba(0, 20, 40, 0.6);
+            border: 1px solid var(--primary-blue);
+            display: flex; flex-direction: column;
+            overflow: hidden;
+        }
+        .loc-header {
+            padding: 15px; background: rgba(0, 81, 255, 0.2);
+            border-bottom: 1px solid var(--primary-blue);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .loc-title { font-family: 'Black Han Sans'; font-size: 1.5rem; color: #fff; }
+        .loc-code { font-family: 'Share Tech Mono'; color: var(--tech-cyan); font-size: 0.9rem; }
+        
+        .loc-view {
+            width: 100%; height: 200px;
+            background: #000; overflow: hidden; position: relative;
+        }
+        .loc-img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; opacity: 0; animation: fadeInImg 0.5s forwards; }
+        @keyframes fadeInImg { to { opacity: 1; } }
+        
+        .loc-desc { padding: 20px; font-family: 'Nanum Gothic'; font-size: 1rem; color: #ccc; line-height: 1.6; flex: 1; overflow-y: auto; }
+        .loc-action {
+            padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); text-align: right;
+        }
+        .action-btn {
+            background: transparent; border: 1px solid var(--tech-cyan); color: var(--tech-cyan);
+            padding: 8px 20px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer;
+            transition: 0.3s;
+        }
+        .action-btn:hover { background: var(--tech-cyan); color: #000; box-shadow: 0 0 15px var(--tech-cyan); }
+
+
+        /* Guide Bubble Styles */
+        .guide-box { 
+            display: flex; 
+            align-items: flex-start; /* PC Default */
+            gap: 30px; /* PC Gap Increase */
+            margin-bottom: 30px; 
+            animation: slideInLeft 0.5s ease-out; 
+        }
+        @keyframes slideInLeft { from { opacity:0; transform:translateX(-20px); } to { opacity:1; transform:translateX(0); } }
+        
+        .guide-avatar-frame { flex-shrink: 0; }
+        .guide-avatar { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); transform: scale(1.1); }
+        
+        .guide-bubble {
+            background: rgba(15, 25, 40, 0.9); border: 1px solid var(--tech-cyan);
+            padding: 25px; border-radius: 15px; position: relative; flex: 1; margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .guide-bubble::before {
+            content:''; position: absolute; top: 30px; left: -9px;
+            border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-right: 10px solid var(--tech-cyan);
+        }
+        .gb-name { font-family: 'Black Han Sans'; color: var(--tech-cyan); font-size: 1.6rem; margin-bottom: 8px; }
+        .gb-text { font-family: 'Nanum Gothic'; font-size: 1.2rem; color: #ddd; line-height: 1.6; }
+
+
+        /* World DB */
+        .db-grid { display: grid; gap: 30px; padding-bottom: 50px; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+        .db-card { background: rgba(15, 20, 30, 0.9); border: 1px solid rgba(0, 81, 255, 0.3); transition: 0.3s; }
+        .db-head { background: rgba(0, 50, 150, 0.2); padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(0,81,255,0.3); }
+        .db-title { font-family: 'Black Han Sans'; color: var(--tech-cyan); }
+        .db-code { font-family: 'Share Tech Mono'; color: var(--primary-blue); }
+        .db-body { padding: 30px; }
+        .db-list li { list-style: none; margin-bottom: 15px; padding-left: 15px; position: relative; color: #ccc; font-size: 1.1rem; line-height: 1.8; }
+        .db-list li::before { content:''; position: absolute; left: 0; top: 10px; width: 4px; height: 4px; background: var(--tech-cyan); }
+        .hl { color: #fff; font-weight: bold; } .hl-red { color: var(--alert-red); } .hl-gold { color: #ffd700; }
+        
+        /* Squad Grid */
+        .char-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding-bottom: 50px; }
+        .char-card { height: 400px; position: relative; cursor: pointer; background: #000; clip-path: polygon(0 0, 100% 0, 100% 90%, 85% 100%, 0 100%); border: 1px solid #333; transition: 0.3s; }
+        .char-card:hover { border-color: var(--tech-cyan); transform: translateY(-5px); }
+        .char-bg-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.8); transition: 0.5s; }
+        .char-card:hover .char-bg-img { filter: grayscale(0); }
+        .char-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
+        .c-name { color: #fff; font-family: 'Black Han Sans'; font-size: 1.5rem; text-shadow: 0 0 5px #000; }
+        .c-rank { position: absolute; top: 10px; right: 10px; font-family: 'Orbitron'; font-weight: 900; font-size: 2rem; color: #fff; font-style: italic; }
+        .rank-S { color: #ffd700; } .rank-A { color: #ff0055; } .rank-B { color: #00f0ff; }
+
+        /* Command Grid */
+        .cmd-grid { display: grid; gap: 30px; padding-bottom: 50px; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); }
+        .cmd-card { display: flex; align-items: center; padding: 25px; gap: 20px; border-left: 4px solid var(--tech-cyan); background: rgba(15, 20, 30, 0.9); border: 1px solid rgba(0, 81, 255, 0.3); transition: 0.3s; }
+        .cmd-card:hover { transform: translateX(5px); background: rgba(0, 81, 255, 0.15); }
+        .cmd-icon { font-family: 'Orbitron'; font-size: 1.2rem; color: var(--tech-cyan); font-weight: 900; background: rgba(0,240,255,0.1); padding: 15px; border-radius: 5px; min-width: 100px; text-align: center; }
+        .cmd-title { font-family: 'Black Han Sans'; color: #fff; font-size: 1.2rem; margin-bottom: 8px; }
+        .cmd-text { color: #bbb; font-size: 0.95rem; line-height: 1.5; }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            padding-bottom: 50px;
+        }
+        .gallery-item {
+            position: relative;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            overflow: hidden;
+            aspect-ratio: 1; 
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .gallery-item:hover { border-color: var(--tech-cyan); }
+        .gallery-img {
+            width: 100%; height: 100%; object-fit: cover;
+            opacity: 0.7; transition: 0.3s;
+        }
+        .gallery-item:hover .gallery-img { opacity: 1; transform: scale(1.1); }
+        .gallery-tag {
+            position: absolute; bottom: 5px; right: 5px;
+            background: rgba(0,0,0,0.8); color: #888;
+            font-family: 'Share Tech Mono'; font-size: 0.7rem; padding: 2px 5px;
+        }
+        
+        /* Image Viewer (Zoom) */
+        #img-viewer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 15000;
+            display: none; justify-content: center; align-items: center;
+            cursor: zoom-out;
+            backdrop-filter: blur(5px);
+        }
+        #img-viewer.active { display: flex; animation: fadeIn 0.3s; }
+        #full-image {
+            max-width: 95%; max-height: 90%;
+            border: 2px solid var(--tech-cyan);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+            object-fit: contain;
+            background: #000;
+        }
+
+
+        /* --- PC Specifics --- */
+        @media (min-width: 769px) {
+            .guide-avatar-frame { width: 220px; height: 220px; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        }
+
+        /* --- Mobile Specifics --- */
+        @media (max-width: 768px) {
+            .hero-container { margin: 10px auto; width: 95%; }
+            .overlay-text { bottom: 0; left: 0; width: 100%; padding: 10px; border-left: none; border-top: 2px solid var(--tech-cyan); }
+            .ot-title { font-size: 0.9rem; }
+            .ot-sub { font-size: 0.7rem; }
+            
+            .guide-box { gap: 5px; align-items: center; }
+            .guide-avatar-frame { width: 150px; height: 150px; margin-top: 15px; }
+            .guide-bubble { padding: 15px; margin-top: 10px; }
+            .gb-name { font-size: 1.2rem; }
+            .gb-text { font-size: 0.9rem; }
+            
+            /* Map Layout for Mobile */
+            .map-ui { grid-template-columns: 1fr; gap: 10px; padding: 10px; }
+            .map-viewport { aspect-ratio: 4 / 3; } 
+            
+            .char-grid { grid-template-columns: repeat(2, 1fr); }
+            .char-card { height: 250px; }
+            
+            .tab-nav { gap: 5px; }
+            .tab-btn {
+                font-size: 0.85rem; padding: 12px 0;
+                flex: 1 1 30%; 
+                min-width: auto;
+                max-width: none;
+            }
+            
+            .cmd-grid { grid-template-columns: 1fr; }
+            .cmd-card { flex-direction: row; align-items: center; gap: 15px; padding: 20px; }
+            .cmd-icon { min-width: auto; width: 70px; font-size: 0.9rem; padding: 10px 5px; flex-shrink: 0; }
+            .cmd-desc { flex: 1; }
+        }
+
+        /* Modal */
+        #modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 10000; display: flex; justify-content: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; }
+        #modal-overlay.active { opacity: 1; pointer-events: all; }
+        .side-panel { width: 100%; max-width: 500px; background: #0a0a12; height: 100%; transform: translateX(100%); transition: 0.3s; overflow-y: auto; border-left: 1px solid var(--primary-blue); }
+        #modal-overlay.active .side-panel { transform: translateX(0); }
+        .panel-header { height: 300px; position: relative; }
+        .panel-img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+        .panel-close { position: fixed; top: 20px; right: 20px; color: var(--alert-red); font-weight: bold; font-size: 2rem; cursor: pointer; z-index: 20; background: rgba(0,0,0,0.5); border-radius: 50%; width: 40px; height: 40px; text-align: center; line-height: 40px; }
+        .panel-content { padding: 30px; color: #fff; }
+        .p-name { font-family: 'Black Han Sans'; font-size: 2rem; margin-bottom: 15px; }
+        .p-tags span { display: inline-block; border: 1px solid var(--primary-blue); padding: 5px 10px; margin-right: 5px; font-size: 0.8rem; color: var(--tech-cyan); font-family: 'Orbitron'; margin-bottom: 5px; }
+        
+        /* Added Ability Box Style */
+        .ability-display { margin: 20px 0; padding: 15px; background: rgba(0, 240, 255, 0.05); border-left: 3px solid var(--tech-cyan); }
+        .abl-label { display: block; font-family: 'Orbitron'; font-size: 0.8rem; color: var(--tech-cyan); margin-bottom: 5px; opacity: 0.8; }
+        .abl-text { font-family: 'Nanum Gothic'; color: #fff; font-weight: bold; font-size: 1rem; }
+
+        .p-desc-title { margin-top: 20px; color: #ffd700; font-family: 'Orbitron'; font-weight: bold; margin-bottom: 10px; }
+        .p-text { color: #ccc; line-height: 1.6; font-size: 0.95rem; }
+        .secret-box { border: 1px dashed var(--alert-red); background: rgba(255, 40, 40, 0.05); padding: 15px; margin-top: 20px; }
+        .secret-title { color: var(--alert-red); font-family: 'Orbitron'; font-weight: bold; margin-bottom: 5px; }
+
+        /* Intro */
+        #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 20000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s; }
+        .intro-logo { color: #fff; font-family: 'Orbitron'; font-size: 3rem; font-weight: 900; text-shadow: 0 0 20px var(--primary-blue); margin-bottom: 30px; text-align: center; }
+        .enter-btn { background: transparent; border: 2px solid var(--tech-cyan); color: var(--tech-cyan); padding: 15px 40px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .enter-btn:hover { background: var(--tech-cyan); color: #000; box-shadow: 0 0 20px var(--tech-cyan); }
+
+        /* BGM Btn */
+        #bgm-toggle { position: fixed; bottom: 20px; right: 20px; width: 40px; height: 40px; background: rgba(0,0,0,0.8); border: 1px solid var(--tech-cyan); border-radius: 5px; z-index: 6000; display: flex; justify-content: center; align-items: center; gap: 3px; cursor: pointer; }
+        .eq-bar { width: 3px; background: var(--tech-cyan); animation: eq 1s infinite; }
+        @keyframes eq { 0%, 100% { height: 5px; } 50% { height: 20px; } }
+        #bgm-toggle.paused .eq-bar { animation: none; height: 3px; background: #555; }
+        .eq-bar:nth-child(2) { animation-delay: 0.2s; } .eq-bar:nth-child(3) { animation-delay: 0.4s; }
+
+    </style>
+</head>
+<body>
+
+    <audio id="bgm" loop>
+        <source src="https://cheerful-fudge-ac30a5.netlify.app/saranghae_yeong.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="bg-particles"></div>
+    <div class="hud-frame"></div>
+    
+    <div id="intro-overlay">
+        <div class="intro-logo">GLITCH<br>SYSTEM</div>
+        <button class="enter-btn" onclick="enterSystem()">[ SYSTEM ACCESS ]</button>
+    </div>
+
+    <header class="top-header">
+        <div class="nav-logo">S급 판정, <span>다시 해주세요</span></div>
+    </header>
+
+    <div class="hero-container">
+        <div class="hero-frame">
+            <div class="glitch-wrapper">
+                <div class="glitch-layer"></div>
+                <div class="glitch-layer"></div>
+                <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/4ae1ad46-c15f-4fe6-9c39-d2e8686c7f49.jpeg" class="hero-img">
+            </div>
+            <div class="overlay-text">
+                <div class="ot-title">TACTICAL MAP: SEOUL</div>
+                <div class="ot-sub">SECTOR: 07 // STATUS: UNSTABLE</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-nav">
+        <div class="tab-btn active" onclick="switchTab('main', this)"><span>메 인</span></div>
+        <div class="tab-btn" onclick="switchTab('world', this)"><span>세계관</span></div>
+        <div class="tab-btn" onclick="switchTab('squad', this)"><span>캐릭터</span></div>
+        <div class="tab-btn" onclick="switchTab('command', this)"><span>명령어</span></div>
+        <div class="tab-btn" onclick="switchTab('gallery', this)"><span>갤러리</span></div>
+    </div>
+
+    <div class="content-area">
+        
+        <div id="tab-main" class="page-section active">
+            <div class="guide-box">
+                <div class="guide-avatar-frame">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/6bf5b2ed-eddd-4a19-bb87-7c7e8891f5ca.png" class="guide-avatar">
+                </div>
+                <div class="guide-bubble">
+                    <div class="gb-name">이사야</div>
+                    <div class="gb-text">"서울의 주요 거점 데이터를 띄웠어. 지도 위의 마커를 눌러봐. 각 구역의 현재 상태를 확인할 수 있을 거야."</div>
+                </div>
+            </div>
+
+            <div class="map-ui">
+                <div class="map-viewport">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/86e224e8-2fd9-4873-9f78-19880362625c.png" class="map-bg" alt="Seoul Map">
+                    
+                    <div class="map-pin" style="top: 60%; left: 28%;" onclick="showLoc('hq')">
+                        <div class="pin-reticle"></div>
+                        <div class="pin-label">HUNTER HQ</div>
+                    </div>
+                    <div class="map-pin" style="top: 65%; left: 52%;" onclick="showLoc('lounge')">
+                        <div class="pin-reticle"></div>
+                        <div class="pin-label">LOUNGE</div>
+                    </div>
+                    <div class="map-pin danger" style="top: 15%; left: 22%;" onclick="showLoc('castle')">
+                        <div class="pin-reticle"></div>
+                        <div class="pin-label">WARNING</div>
+                    </div>
+                    <div class="map-pin danger" style="top: 24%; left: 76%;" onclick="showLoc('snow')">
+                        <div class="pin-reticle"></div>
+                        <div class="pin-label">SNOW-GATE</div>
+                    </div>
+                    <div class="map-pin danger" style="top: 42%; left: 44%;" onclick="showLoc('river')">
+                        <div class="pin-reticle"></div>
+                        <div class="pin-label">RIVER-GATE</div>
+                    </div>
+                    <div class="map-pin danger" style="top: 48%; left: 78%;" onclick="showLoc('tower')">
+                        <div class="pin-reticle"></div>
+                        <div class="pin-label">NAMSAN-TOWER</div>
+                    </div>
+                    <div class="map-pin danger" style="top: 78%; left: 25%;" onclick="showLoc('subway')">
+                        <div class="pin-reticle"></div>
+                        <div class="pin-label">SUBWAY-GATE</div>
+                    </div>
+                </div>
+
+                <div class="loc-panel">
+                    <div class="loc-header">
+                        <span class="loc-title" id="loc-title">SELECT TARGET</span>
+                        <span class="loc-code" id="loc-code">NO DATA</span>
+                    </div>
+                    <div class="loc-view">
+                        <img id="loc-img" src="" style="display:none;" class="loc-img">
+                        <div id="loc-placeholder" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; color:#555; font-family:'Share Tech Mono';">WAITING FOR INPUT...</div>
+                    </div>
+                    <div class="loc-desc" id="loc-desc">
+                        지도상의 핀을 클릭하여 상세 정보를 스캔하십시오.
+                    </div>
+                    <div class="loc-action">
+                        <button class="action-btn">ACCESS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-world" class="page-section">
+            <div class="guide-box">
+                <div class="guide-avatar-frame">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/2d7339bd-a4af-4d73-b851-b32b1aa1ddce.png" class="guide-avatar">
+                </div>
+                <div class="guide-bubble">
+                    <div class="gb-name">재이</div>
+                    <div class="gb-text">"세계관 데이터베이스 업데이트 완료. 2036년 서울의 현황과 세분화된 등급 체계를 반영했습니다. 숙지해두십시오."</div>
+                </div>
+            </div>
+            <div class="db-grid">
+                <div class="db-card">
+                    <div class="db-head"><span class="db-title">세계관 개요</span><span class="db-code">W-02</span></div>
+                    <div class="db-body">
+                        <ul class="db-list">
+                            <li><span class="hl">배경:</span> <span class="hl-red">2036년</span> 대한민국 서울 (대재앙 10년 후).</li>
+                            <li><span class="hl">장르:</span> 현대 판타지 / 헌터 / 아포칼립스.</li>
+                            <li><span class="hl">개요:</span> 게이트 발생→던전 및 마물 출현→각성자 등장.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="db-card">
+                    <div class="db-head"><span class="db-title">헌터 등급 체계</span><span class="db-code">R-07</span></div>
+                    <div class="db-body">
+                        <ul class="db-list">
+                            <li><span class="hl-gold">S급:</span> 개인 재앙. 도시급 파괴력.</li>
+                            <li><span class="hl">A급:</span> 국가 통제 병기. 전략 자산.</li>
+                            <li><span class="hl">B급:</span> 전면전 전투원. 건물급 파괴.</li>
+                            <li><span class="hl">C~D급:</span> 전술 전투원. 화기 무력화.</li>
+                            <li><span class="hl">E~F급:</span> 비전투 및 보조. 일반인 수준.</li>
+                            <li style="font-size:0.8rem; color:#888;">*규정: 최소 1년간 재측정 불가.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="db-card">
+                    <div class="db-head"><span class="db-title">게이트 & 던전</span><span class="db-code">G-12</span></div>
+                    <div class="db-body">
+                        <ul class="db-list">
+                            <li><span class="hl-red">SS급(신급 영역):</span> 측정 불가.</li>
+                            <li><span class="hl-red">악마성:</span> 서울 상공에 징조도 없이 나타난 게이트.</li>
+                            <li><span class="hl-red">설원:</span> 인근 산에 발생한 게이트로 인해 한파 구역 형성.</li>
+                            <li><span class="hl-red">심해(한강):</span> 한강 중심부 수심 깊은 곳에서 감지된 균열.</li>
+                            <li><span class="hl-red">지하철(순환궤도):</span> 도심 지하에서 발생한 폐쇄 게이트</li>
+                            <li><span class="hl-red">남산타워(도심중앙):</span> 타워 상층에서 개방된 고정형 게이트</li>
+                            <br>
+                            <li><span class="hl-gold">S급:</span> 재앙급, 환경 붕괴. 상위 개체 다수.</li>
+                            <li><span class="hl">A~B급:</span> 보스급 출현. 도시 피해 우려.</li>
+                            <li><span class="hl">C~D급:</span> 중/저위 개체 다수. 숙련 집단전.</li>
+                            <li><span class="hl">E~F급:</span> 소수 개체. 위험도 낮음.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="db-card">
+                    <div class="db-head"><span class="db-title">주요 조직</span><span class="db-code">O-04</span></div>
+                    <div class="db-body">
+                        <ul class="db-list">
+                            <li><span class="hl">한국헌터협회:</span> 국가 공무원. 헌터 관리 및 게이트 배정. 내부 시설(기숙사, 측정실 등) 보유.</li>
+                            <li><span class="hl">글리치 (GLITCH):</span> 협회 승인 민간 <span class="hl">길드</span>.</li>
+                            <li><span class="hl">구성:</span> 이사야(리더), 태경, 반, 재이.</li>
+                            <li><span class="hl">임무:</span> A~S급 던전 및 오염된 게이트 전담.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-squad" class="page-section">
+            <div class="guide-box">
+                <div class="guide-avatar-frame">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/4e440f03-8a51-4e8a-a57f-4ade49f0ab67.png" class="guide-avatar">
+                </div>
+                <div class="guide-bubble">
+                    <div class="gb-name">반</div>
+                    <div class="gb-text">"우리 팀원들이야. 다들 성격이 좀... 어딘가 망가져 있긴 한데, 실력 하나는 확실해. 궁금하면 카드를 눌러서 자세히 봐."</div>
+                </div>
+            </div>
+            <div class="char-grid">
+                <div class="char-card" onclick="openModal(0)">
+                    <span class="c-rank rank-S">S</span>
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/46d64c42-af83-4691-b654-9f0e9f2566ff.png" class="char-bg-img" style="object-position: 40% top;">
+                    <div class="char-overlay"><h3 class="c-name">이사야</h3></div>
+                </div>
+                <div class="char-card" onclick="openModal(1)">
+                    <span class="c-rank rank-A">A</span>
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/db11b198-40da-4247-9766-fc8c421d4569.png" class="char-bg-img">
+                    <div class="char-overlay"><h3 class="c-name">태경</h3></div>
+                </div>
+                <div class="char-card" onclick="openModal(2)">
+                    <span class="c-rank rank-B">B</span>
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/8d8c447c-041a-42d5-94eb-b879b1581b9d.png" class="char-bg-img" style="object-position: 25% top;">
+                    <div class="char-overlay"><h3 class="c-name">반</h3></div>
+                </div>
+                <div class="char-card" onclick="openModal(3)">
+                    <span class="c-rank rank-A">A</span>
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/9a4bf3e3-3d99-4e19-af4a-f2d1b7f95c62.png" class="char-bg-img">
+                    <div class="char-overlay"><h3 class="c-name">재이</h3></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-command" class="page-section">
+            <div class="guide-box">
+                <div class="guide-avatar-frame">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/cd3878a2-0ddd-40a7-9a42-e9b80d7d3a52.png" class="guide-avatar">
+                </div>
+                <div class="guide-bubble">
+                    <div class="gb-name">태경</div>
+                    <div class="gb-text">"야, 신입. 헷갈리면 이것만 기억해. 시스템 명령어 모음이다. 멍청하게 굴지 말고 필요할 때 써먹어. 특히 사칭 같은 거."</div>
+                </div>
+            </div>
+            <div class="cmd-grid">
+                <div class="cmd-card">
+                    <div class="cmd-icon">!요약</div>
+                    <div class="cmd-desc"><div class="cmd-title">상황 브리핑</div><div class="cmd-text">최근 10~20턴 내의 내용을 요약하여 현재 상황을 빠르게 파악합니다.</div></div>
+                </div>
+                <div class="cmd-card">
+                    <div class="cmd-icon">!점검</div>
+                    <div class="cmd-desc"><div class="cmd-title">캐릭터 상태 점검</div><div class="cmd-text">현재 캐릭터의 성격이나 설정이 붕괴되지 않았는지 시스템이 점검하고 수정합니다.</div></div>
+                </div>
+                <div class="cmd-card">
+                    <div class="cmd-icon">!사칭</div>
+                    <div class="cmd-desc"><div class="cmd-title">사칭방지</div><div class="cmd-text">{user}의 역할을 AI가 플레이 도중 사칭하거나 헷갈려할 때, 즉시 역할을 재조정합니다.</div></div>
+                </div>
+                <div class="cmd-card">
+                    <div class="cmd-icon">!진행</div>
+                    <div class="cmd-desc"><div class="cmd-title">스토리 자동 진행</div><div class="cmd-text">이야기가 정체될 때 사용하세요. 새로운 게이트 임무나 돌발 이벤트를 발생시켜 서사를 강제로 진행시킵니다.</div></div>
+                </div>
+                <div class="cmd-card">
+                    <div class="cmd-icon">!진실</div>
+                    <div class="cmd-desc"><div class="cmd-title">거짓 간파</div><div class="cmd-text">이사야의 거짓말을 감지합니다. 그가 숨기고 있는 의도나 진실을 시스템 권한으로 강제 분석하여 표시합니다.</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-gallery" class="page-section">
+            <div class="guide-box">
+                <div class="guide-avatar-frame">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/6bf5b2ed-eddd-4a19-bb87-7c7e8891f5ca.png" class="guide-avatar">
+                </div>
+                <div class="guide-bubble">
+                    <div class="gb-name">이사야</div>
+                    <div class="gb-text">"이곳은 폐기된 데이터들의 무덤이야. 일명 'B-CUT'. 정식 로그에 남지 못한 이미지나 기록들을 모아두는 곳이지."</div>
+                </div>
+            </div>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/1c21c5ed-c8d0-4c2c-b20a-923e52562ba1.png" class="gallery-img">
+                    <span class="gallery-tag">ISAYA_01</span>
+                </div>
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/3f48c195-cf17-4086-8986-f8bc447735db.png" class="gallery-img">
+                    <span class="gallery-tag">ISAYA_02</span>
+                </div>
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/f91a4035-9a9d-49f7-9458-0c3d1edfb2c0.png" class="gallery-img">
+                    <span class="gallery-tag">ISAYA_03</span>
+                </div>
+
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/db8b0438-293a-4629-85b2-44acaffa24f2.png" class="gallery-img">
+                    <span class="gallery-tag">JAEYI_01</span>
+                </div>
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/f63cf2cd-5129-4b3f-a188-81852d8e6323.png" class="gallery-img">
+                    <span class="gallery-tag">JAEYI_02</span>
+                </div>
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/4605ba60-602c-4d93-8c48-5a4d8f756634.png" class="gallery-img">
+                    <span class="gallery-tag">JAEYI_03</span>
+                </div>
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/03aa7374-4352-4853-aee9-25c55de76b79.png" class="gallery-img">
+                    <span class="gallery-tag">JAEYI_04</span>
+                </div>
+
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/5f3f29d4-13cd-4e3a-a695-e0efbbfd2da8.png" class="gallery-img">
+                    <span class="gallery-tag">BAN_01</span>
+                </div>
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/5cc75d90-f360-47ae-ac7b-475570f71c4b.png" class="gallery-img">
+                    <span class="gallery-tag">BAN_02</span>
+                </div>
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/909456cf-a225-4cd8-9557-6e5081c3732c.png" class="gallery-img">
+                    <span class="gallery-tag">BAN_03</span>
+                </div>
+
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/e4db8946-cb43-4ea4-849d-148bd70bc5fa.png" class="gallery-img">
+                    <span class="gallery-tag">TAEKYUNG_01</span>
+                </div>
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/669e1443-588e-4d07-a31b-2d5015edfd1c.png" class="gallery-img">
+                    <span class="gallery-tag">TAEKYUNG_02</span>
+                </div>
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/dbed32c5-52d9-4fc1-8544-f61f948158ca.png" class="gallery-img">
+                    <span class="gallery-tag">TAEKYUNG_03</span>
+                </div>
+
+                <div class="gallery-item" onclick="viewImage(this)">
+                    <img src="https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/13b669c4-6d82-4cb9-a713-fee4e3b1b63a.png" class="gallery-img">
+                    <span class="gallery-tag">TAEKYUNG_04</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="modal-overlay">
+        <div class="side-panel">
+            <div class="panel-header">
+                <div class="panel-close" onclick="closeModal()">✕</div>
+                <img id="m-img" src="" class="panel-img">
+            </div>
+            <div class="panel-content">
+                <div class="p-name" id="m-name">NAME</div>
+                <div class="p-tags">
+                    <span class="p-tag" id="m-rank">RANK</span>
+                    <span class="p-tag accent" id="m-role">ROLE</span>
+                    <span class="p-tag" id="m-age">AGE</span>
+                    <span class="p-tag" id="m-height">HEIGHT</span> <span class="p-tag" id="m-mbti">MBTI</span>
+                </div>
+                
+                <div class="ability-display">
+                    <span class="abl-label">COMBAT SPEC</span>
+                    <span class="abl-text" id="m-ability"></span>
+                </div>
+
+                <div class="p-desc-title">BACKGROUND LOG</div>
+                <p class="p-text" id="m-bg"></p>
+                <div class="secret-box">
+                    <div class="secret-title">⚠ RESTRICTED</div>
+                    <p class="p-text" id="m-hidden" style="margin:0; font-weight:bold; color:var(--alert-red);"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="img-viewer" onclick="closeViewer()">
+        <img id="full-image">
+    </div>
+
+    <div id="bgm-toggle" class="paused" onclick="toggleBgm()">
+        <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('bg-particles');
+            for (let i=0; i<30; i++) {
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                p.style.left = Math.random()*100 + 'vw';
+                p.style.animationDuration = (Math.random()*15 + 10) + 's';
+                p.style.animationDelay = (Math.random()*5) + 's';
+                const s = Math.random()*8 + 3;
+                p.style.width = s+'px'; p.style.height = s+'px';
+                container.appendChild(p);
+            }
+        });
+
+        function switchTab(tabName, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+
+        function enterSystem() {
+            document.getElementById('intro-overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('intro-overlay').style.display = 'none';
+                const bgm = document.getElementById('bgm');
+                bgm.volume = 0.5;
+                bgm.play().then(() => {
+                    document.getElementById('bgm-toggle').classList.remove('paused');
+                }).catch(()=>{});
+            }, 500);
+        }
+
+        function toggleBgm() {
+            const bgm = document.getElementById('bgm');
+            const btn = document.getElementById('bgm-toggle');
+            if (bgm.paused) { bgm.play(); btn.classList.remove('paused'); }
+            else { bgm.pause(); btn.classList.add('paused'); }
+        }
+
+        /* --- MAP LOGIC --- */
+        const locations = {
+            'hq': {
+                title: "한국헌터협회 본부",
+                code: "LOC-01 // SEOUL-HQ",
+                img: "https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/28134591-a1a8-4f04-834a-a49f737f7910.png",
+                desc: "대한민국 헌터 관리의 심장부. 모든 게이트의 발생 정보와 헌터들의 동선이 이곳에서 통제된다. 글리치는 별도의 보안 회선을 통해 출입한다."
+            },
+            'castle': {
+                title: "악마성",
+                code: "SS-RANK", 
+                img: "https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/d86b49a6-bcf7-44ee-9608-06292b9e67f1.png",
+                desc: "서울 상공에 징조도 없이 나타난 거대한 부유성. 측정 불가의 마기를 뿜어내고 있다. 이사야조차 '성가시다'고 표현한 최악의 재앙."
+            },
+            'lounge': {
+                title: "글리치 라운지",
+                code: "HIDEOUT // PRIVATE",
+                img: "https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/9ffed43f-8b8f-4a3b-a4be-fec66bb6b393.png",
+                desc: "헌터 본부 내부에 있는 글리치의 작전 회의 및 휴식 공간."
+            },
+            'snow': {
+                title: "설원 게이트",
+                code: "SS-RANK",
+                img: "https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/6a981ddf-f740-4247-a4c3-6f6f6fbd0123.png",
+                desc: "인근 산에 발생한 게이트로 인해 주변이 영구 동토화된 한파 구역. 내부 환경이 영하 40도에 육박하며, 냉기 속성 마수들이 출몰한다."
+            },
+            'river': {
+                title: "한강 게이트",
+                code: "SS-RANK",
+                img: "https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/41173114-6088-45d9-a750-b3df808cc64f.png",
+                desc: "한강 중심부 수심 깊은 곳에서 감지된 균열. 수중 전투 페널티로 인해 공략 난이도가 높다. 다수의 수룡형 개체가 확인되었다."
+            },
+            // Added Locations
+            'tower': {
+                title: "남산타워 게이트",
+                code: "SS-RANK // FIXED",
+                img: "https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/059776cc-f75a-4752-a67f-79b6d2f5f11d.png",
+                desc: "타워 상층에서 개방된 고정형 게이트. 지속적으로 낙뢰가 발생해 도심 전역에 무차별적인 전격 피해를 유발한다."
+            },
+            'subway': {
+                title: "지하철 게이트",
+                code: "SS-RANK // CLOSED",
+                img: "https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/929dbe1d-4e10-43a6-b47a-8991907ce0e1.png",
+                desc: "도심 지하에서 발생한 폐쇄 게이트. 순환 궤도를 따라 끊임없이 공간이 뒤틀리며, 내부 진입 시 탈출이 불가능에 가깝다."
+            }
+        };
+
+        function showLoc(id) {
+            const data = locations[id];
+            if(!data) return;
+
+            // UI Update
+            document.getElementById('loc-placeholder').style.display = 'none';
+            const imgEl = document.getElementById('loc-img');
+            imgEl.style.display = 'block';
+            
+            // Image Fade Effect
+            imgEl.style.opacity = 0;
+            setTimeout(() => {
+                imgEl.src = data.img;
+                imgEl.style.opacity = 1;
+            }, 100);
+
+            document.getElementById('loc-title').innerText = data.title;
+            document.getElementById('loc-code').innerText = data.code;
+            document.getElementById('loc-desc').innerText = data.desc;
+        }
+
+        const db = [
+            { 
+                name: "이사야", age: "29세(남)", height: "187cm", rank: "S-RANK", role: "LEADER", mbti: "INTJ", 
+                ability: "환각, 은신, 그림자 조작, 정신 지배",
+                bg: "상류층 정치 가문 출신으로 최연소 각성을 이루었으나, 현재는 협회 공인 특수 목적팀 '글리치'의 리더이자 정보상으로 활동 중이다. 오로지 자신의 통제와 재미, 그리고 유희를 동기로 삼아 움직인다.",
+                hidden: "싸이코패스 성향을 지녔다. 겉으로는 가짜 친절과 나사 빠진 듯한 여유를 보이지만, 속은 감정이 철저히 결여되어 있고 잔혹하다. 능구렁이처럼 거짓말과 기만에 능숙하며, 금단 현상이 오면 손을 떠는 심각한 꼴초다.",
+                img: "https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/46d64c42-af83-4691-b654-9f0e9f2566ff.png"
+            },
+            { 
+                name: "태경", age: "28세(남)", height: "183cm", rank: "A-RANK", role: "SWORDSMAN", mbti: "ENTJ", 
+                ability: "발화, 청염(푸른 불꽃), 검기",
+                bg: "한때 펜싱 천재로 불렸으나 경기 중 상대의 도발에 넘어가 사고를 치고 선수 생명이 끝났다. 각성 후에는 강자와의 전투와 단순한 승부욕을 충족하기 위해 헌터가 되었다.",
+                hidden: "오만하고 결벽증이 심하며 승부사 기질이 강하다. 겉으로는 여유롭고 건방지며 타인을 하대하는 태도를 보이지만, 그 이면에는 깊은 애정결핍과 인정욕구가 자리 잡고 있다.",
+                img: "https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/db11b198-40da-4247-9766-fc8c421d4569.png"
+            },
+            { 
+                name: "반", age: "25세(남)", height: "179cm", rank: "B-RANK", role: "FIGHTER", mbti: "ISTP", 
+                ability: "무통각, 흡혈 강화, 단검 사용",
+                bg: "뒷골목 고아 출신으로 거친 거리 생활을 하다 각성했다. 이사야에게 직접 스카우트되어 팀에 합류했으며, 그를 통해 소속감을 느끼고 가족을 찾는 것을 목표로 한다. 연애 경험은 없다.",
+                hidden: "냉정하고 무심한 성격이다. 겉으로는 다가가기 쉬워 보이지만 철벽을 치는 스타일이며, 속으로는 언제 버려질지 모른다는 유기불안을 겪고 있다. 칭찬에 약하고 표현이 서툰 츤데레다.",
+                img: "https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/8d8c447c-041a-42d5-94eb-b879b1581b9d.png"
+            },
+            { 
+                name: "재이", age: "26세(남)", height: "181cm", rank: "A-RANK", role: "ICE MAGE / HEALER", mbti: "ISTJ", 
+                ability: "빙결, 광역 동결",
+                bg: "원래는 탄탄대로를 걷던 엘리트였으나, 이사야에게 치명적인 약점을 잡혀 반강제로 '글리치'에 합류했다. 팀의 사고를 수습하고 식사를 챙기는 등 실질적인 살림꾼이다.",
+                hidden: "완벽주의자이자 독설가다. 겉으로는 차갑고 엄격하게 선을 긋지만, 속으로는 누구보다 팀원들의 생존에 집착하며 뒤에서 묵묵히 챙겨주는 헌신적인 면모가 있다.",
+                img: "https://d394jeh9729epj.cloudfront.net/8xTOAWIktzO-KKKOUjdKSk1a/9a4bf3e3-3d99-4e19-af4a-f2d1b7f95c62.png"
+            }
+        ];
+
+        function openModal(idx) {
+            const d = db[idx];
+            document.getElementById('m-img').src = d.img;
+            document.getElementById('m-name').innerText = d.name;
+            const rankEl = document.getElementById('m-rank');
+            rankEl.innerText = d.rank.split('-')[0];
+            rankEl.className = 'p-tag';
+            if(d.rank.startsWith('S')) rankEl.style.borderColor = '#ffd700';
+            else if(d.rank.startsWith('A')) rankEl.style.borderColor = '#ff0055';
+            else rankEl.style.borderColor = '#00f0ff';
+            
+            document.getElementById('m-role').innerText = d.role;
+            document.getElementById('m-age').innerText = d.age;
+            document.getElementById('m-height').innerText = d.height; // Height Data Bind
+            document.getElementById('m-mbti').innerText = d.mbti;
+            document.getElementById('m-ability').innerText = d.ability;
+            document.getElementById('m-bg').innerText = d.bg;
+            document.getElementById('m-hidden').innerText = d.hidden;
+            document.getElementById('modal-overlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Gallery Zoom Functions
+        function viewImage(el) {
+            const img = el.querySelector('img').src;
+            const viewer = document.getElementById('img-viewer');
+            const fullImg = document.getElementById('full-image');
+            fullImg.src = img;
+            viewer.classList.add('active');
+        }
+
+        function closeViewer() {
+            document.getElementById('img-viewer').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
